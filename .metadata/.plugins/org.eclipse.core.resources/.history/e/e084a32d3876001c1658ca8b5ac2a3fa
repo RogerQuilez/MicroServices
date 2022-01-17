@@ -1,0 +1,14 @@
+#Identificador del servicio
+spring.application.name=microservicio-usuarios
+#De esta manera asignamos un puerto aleatorio para el servicio
+server.port=${PORT:0} 
+#Configuración de la ID de la instancia
+eureka.instance.instance-id=${spring.application.name}
+
+spring.datasource.url=jdbc:mysql://localhost:3306/db_microservicios_examenes
+spring.datasource.username=root
+spring.datasource.password=root
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.database-platform=org.hibernate.dialect.MariaDB103Dialect
+spring.jpa.generate-ddl=true
+logging.level.org.hibernate.SQL=debug
