@@ -7,8 +7,10 @@ import com.formacionbdi.microservicios.commons.controllers.CommonController;
 import com.formacionbdi.microservicios.commons.examenes.entity.Examen;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,16 +18,14 @@ import java.util.Optional;
 public class CursoController extends CommonController<Curso, ICursoService> {
 
     @PutMapping("/{idCurso}")
-    public ResponseEntity<?> update(@PathVariable Long idCurso, @RequestBody Curso curso) {
+    public ResponseEntity<?> update(@Valid @RequestBody Curso curso, BindingResult result, @PathVariable Long idCurso) {
+
+        if (result.hasErrors()) return validar(result);
+
         Curso dbCurso = getCurso(idCurso);
         if (curso == null) return ResponseEntity.notFound().build();
         dbCurso.setNombre(curso.getNombre());
         return ResponseEntity.status(HttpStatus.CREATED).body(this.service.save(dbCurso));
-    }
-
-    @GetMapping("/alumno/{idCurso}")
-    public ResponseEntity<?> findByAlumnoId(@PathVariable Long idCurso) {
-        return ResponseEntity.ok(service.findCursoByAlumnoId(idCurso));
     }
 
     @PutMapping("/{idCurso}/asignar-alumnos")

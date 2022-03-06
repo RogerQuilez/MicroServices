@@ -1,9 +1,13 @@
 package com.formacionbdi.microservicios.commons.alumnos.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 
@@ -15,17 +19,31 @@ public class Alumno {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
+
+	@NotEmpty
 	private String nombre;
+
+	@NotEmpty
 	private String apellido;
+
+	@NotEmpty
+	@Email
 	private String email;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createAt;
+
+	@Lob
+	@JsonIgnore
 	private byte[] foto;
 	
 	@PrePersist
 	public void prePersist() {
-		this.createAt = new Date();
+		createAt = new Date();
+	}
+
+	public Integer getFotoHashCode() {
+		return !Objects.equals(foto, null) ? Arrays.hashCode(foto) : null;
 	}
 
 	@Override
